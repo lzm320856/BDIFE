@@ -1,1 +1,3 @@
-#vueÊı¾İ»ñÈ¡¡¢ÉèÖÃµÄÔ­Àí
+ï»¿#vueæ•°æ®è·å–ã€è®¾ç½®çš„åŸç†
+
+å…³é”®ç‚¹ï¼š```Object.defineProperty()```:[MDNæ–‡æ¡£](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
