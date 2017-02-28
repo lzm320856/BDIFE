@@ -59,9 +59,11 @@
 	})
 	rightOut.addEventListener("click",function(){
 	  var last = list.children.length-1
+	  alert(list.children[last].innerText);
 	  list.removeChild(list.children[last]);
 	});
 	leftOut.addEventListener("click",function(){
+	  alert(list.children[0].innerText);	
 	  list.removeChild(list.children[0]);
 	});
 </script>
