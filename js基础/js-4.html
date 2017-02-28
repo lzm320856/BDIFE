@@ -1,0 +1,69 @@
+﻿<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+    <style>
+	  *{
+		padding:0;
+		margin:0;
+	  }
+	  li{
+		list-style:none;
+		float:left;
+		margin:10px;
+		color:#fff;
+		background:red;
+	  }
+	  .clear-fix:after{
+		display:block;
+		content:"";
+		clear:both;
+	  }
+	  .list{
+		margin:20px;
+		display:inline-block;
+		background:#eee;
+	  }
+    </style>
+  </head>
+<body>
+<input type="text" id="aqi-input">
+<button id="left-in">左侧入</button>
+<button id="left-out">左侧出</button>
+<button id="right-in">右侧入</button>
+<button id="right-out">右侧出</button>
+  <div>
+    <ul class="list clear-fix">
+      <li>12</li>
+      <li>23</li>
+    </ul>
+  </div>
+<script>
+	var input = document.querySelector("#aqi-input");
+	var leftIn = document.querySelector("#left-in");
+	var leftOut = document.querySelector("#left-out");
+	var rightIn = document.querySelector("#right-in");
+	var rightOut = document.querySelector("#right-out");
+	var list = document.querySelector(".list");
+
+	leftIn.addEventListener("click",function(){
+		var node = document.createElement("li");
+		node.innerText = input.value;
+		list.insertBefore(node,list.children[0])
+	})
+	rightIn.addEventListener("click",function(){
+	  var node = document.createElement("li");
+	  node.innerText = input.value;
+	  list.appendChild(node);
+	})
+	rightOut.addEventListener("click",function(){
+	  var last = list.children.length-1
+	  list.removeChild(list.children[last]);
+	});
+	leftOut.addEventListener("click",function(){
+	  list.removeChild(list.children[0]);
+	});
+</script>
+</body>
+</html>
