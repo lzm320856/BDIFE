@@ -1,8 +1,10 @@
 function Observer(data) {
     this.data = data;
-    this.walk(data)
+    this.makeObserver(data);
+    this.eventBus = new PubSub();
 }
-Observer.prototype.walk = function (data) {
+//该方法就是给属性绑get/set
+Observer.prototype.makeObserver = function (data) {
     if(typeof data !== "object"){
         throw "please input object!"
     }
@@ -21,6 +23,7 @@ Observer.prototype.walk = function (data) {
     }
 };
 Observer.prototype.convert = function (key,val) {
+    var that = this;
     Object.defineProperty(this.data,key,{
         enumerable:true,
         configurable:true,
@@ -28,20 +31,58 @@ Observer.prototype.convert = function (key,val) {
             console.log("你访问了" + key);
             return val;
         },
-        set:function (newVal) {
+        set:function (newVal,func) {
             console.log("你设置了" + key + "新的值为" + newVal);
             if(newVal == val) return;
+            if(typeof newVal == "object"){
+                new Observer(newVal);
+            }
+            that.eventBus.emit(key,newVal);    //触发订阅
             val = newVal;
+            return val;
         }
     })
 };
-let data = {
-    user:{
-        name:"god",
-        age:"24"
-    },
-    address:{
-        city:"beijing"
+
+
+//发布订阅模式，一个中间层（包括一个订阅接口，一个取消接口，一个发布接口）
+function PubSub(){
+    this.handlers = {};
+}
+PubSub.prototype.on = function (eventType,handler) {
+    if (!(eventType in this.handlers)){
+        this.handlers[eventType] = [];
     }
+    this.handlers[eventType].push(handler);
+    return this;
+}
+PubSub.prototype.emit = function (eventType) {
+    if(!this.handlers[eventType]) return;
+    var handlerArgs = [].slice.call(arguments,1);  //刨除eventType，保留其他参数
+    for(var i = 0; i < this.handlers[eventType].length;i++){
+        this.handlers[eventType][i].apply(this,handlerArgs);  //实际上等于func(..rest);
+    }
+    return this;
+}
+PubSub.prototype.off = function (eventType) {
+    if(!(eventType in this.handlers)) return;
+    delete this.handlers[eventType];
+    return this;
+}
+Observer.prototype.$watch = function(attr, callback){
+    this.eventBus.on(attr, callback);
 };
-let app = new Observer(data);
+
+
+let app1 = new Observer({
+    name: 'youngwind',
+    age: 25
+});
+
+
+// 你需要实现 $watch 这个 API
+app1.$watch('age', function(age) {
+    console.log(`我的年纪变了，现在已经是：${age}岁了`)
+});
+
+app1.data.age = 100; // 输出：'我的年纪变了，现在已经是100岁了'
